@@ -34,8 +34,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.test.skip>false</maven.test.skip>
         <downloadSources>true</downloadSources>
-        <java_source_version>1.8</java_source_version>
-        <java_target_version>1.8</java_target_version>
+        <java_source_version>11</java_source_version>
+        <java_target_version>11</java_target_version>
         <file_encoding>UTF-8</file_encoding>
         <flink_streaming_version>1.5.0.RELEASE</flink_streaming_version>
         <flink.version>1.16.2</flink.version>
@@ -82,7 +82,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.16.20</version>
+                <version>1.18.20</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

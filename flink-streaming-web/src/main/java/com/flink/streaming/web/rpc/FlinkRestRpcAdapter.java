@@ -42,4 +42,13 @@ public interface FlinkRestRpcAdapter {
   String savepointPath(String jobId, DeployModeEnum deployModeEnum);
 
 
+  /**
+   * standalone模式下执行savepoint
+   *
+   * @author zhouhb
+   * @date 2024/3/19
+   * @time 10:39
+   */
+  void savepointForStandalone(String jobId, String targetDirectory) throws Exception;
+
 }

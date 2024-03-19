@@ -1,6 +1,7 @@
 package com.flink.streaming.web.rpc.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.flink.streaming.common.constant.SystemConstant;
 import com.flink.streaming.web.common.FlinkYarnRestUriConstants;
 import com.flink.streaming.web.common.util.HttpUtil;
 import com.flink.streaming.web.enums.DeployModeEnum;
@@ -12,8 +13,14 @@ import com.flink.streaming.web.service.SystemConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zhuhuipei
@@ -90,5 +97,27 @@ public class FlinkRestRpcAdapterImpl implements FlinkRestRpcAdapter {
       log.error("savepointPath is error", e);
     }
     return null;
+  }
+
+  @Override
+  public void savepointForStandalone(String jobId, String targetDirectory) throws Exception {
+    if (StringUtils.isEmpty(jobId)) {
+      throw new BizException(SysErrorEnum.HTTP_REQUEST_IS_NULL);
+    }
+    String url = HttpUtil.buildUrl(systemConfigService.getFlinkHttpAddress(DeployModeEnum.STANDALONE),
+            FlinkYarnRestUriConstants.getUriJobsForStandalone(jobId)) + SystemConstant.VIRGULE + "savepoints";
+    log.info("请求参数：jobId={}, url={}", jobId, url);
+
+    HttpHeaders headers = HttpUtil.buildHttpHeaders(MediaType.APPLICATION_JSON_VALUE);
+    Map<String, Object> params = new HashMap<>();
+    params.put("cancel-job", true);
+    params.put("target-directory", targetDirectory);
+    // 封装JSON数据和头信息到Htgit tpEntity
+    HttpEntity<String> entity = new HttpEntity<>(JSON.toJSONString(params), headers);
+
+    // 发送POST请求
+    log.info("[savepointForStandalone] command={}", entity.getBody());
+    String res = HttpUtil.buildRestTemplate(HttpUtil.TIME_OUT_1_M).postForObject(url, entity, String.class);
+    log.info("请求参数：jobId={}, url={}, result={}", jobId, url, res);
   }
 }
