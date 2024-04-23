@@ -110,7 +110,7 @@ public class FlinkRestRpcAdapterImpl implements FlinkRestRpcAdapter {
 
     HttpHeaders headers = HttpUtil.buildHttpHeaders(MediaType.APPLICATION_JSON_VALUE);
     Map<String, Object> params = new HashMap<>();
-    params.put("cancel-job", true);
+    //params.put("cancel-job", true);
     params.put("target-directory", targetDirectory);
     // 封装JSON数据和头信息到Htgit tpEntity
     HttpEntity<String> entity = new HttpEntity<>(JSON.toJSONString(params), headers);
